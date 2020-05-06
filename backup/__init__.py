@@ -1,13 +1,15 @@
-from aqt import mw
-from anki.hooks import addHook
+from aqt import gui_hooks, mw
 from anki.exporting import AnkiCollectionPackageExporter
 
 
-def main():
-    addHook('unloadProfile', backup)
+def main() -> None:
+    gui_hooks.media_sync_did_start_or_stop.append(backup)
 
 
-def backup(*args, **kwargs):
+def backup(media_sync_running: bool) -> None:
+    if media_sync_running:
+        return
+
     config = mw.addonManager.getConfig(__name__)
     backup_path = config['backup_path']
 
