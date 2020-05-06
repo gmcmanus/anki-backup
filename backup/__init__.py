@@ -19,5 +19,8 @@ def backup(media_sync_running: bool) -> None:
     exporter = AnkiCollectionPackageExporter(mw.col)
     exporter.exportInto(backup_path)
 
+    # exportInto closes the collection, so we need to reopen it
+    mw.reopen()
+
 
 main()
